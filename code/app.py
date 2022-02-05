@@ -1,6 +1,6 @@
 from sanic import Sanic, response
 
-app = Sanic('sample-web-service')
+app = Sanic('air-tickets-booking')
 
 
 @app.route('/')
