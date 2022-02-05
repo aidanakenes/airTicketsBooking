@@ -1,5 +1,5 @@
 from sanic import Sanic, response
 
 
-async def offers_by_id(request, offers_id):
-    return response.json({'test': offers_id})
+async def offers_by_id(request, offer_id):
+    return response.json({'test': offer_id})
