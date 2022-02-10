@@ -1,7 +1,7 @@
 from sanic import Sanic, response
 import jsonschema
 
-from .. import schemas
+import schemas
 
 
 async def search(request):
