@@ -1,5 +1,6 @@
 SEARCH_SCHEMA = {
     'type': 'object',
+    'additionalProperties': False,
     'properties': {
         'provider': {
             'type': 'string'
@@ -45,6 +46,7 @@ SEARCH_SCHEMA = {
 
 BOOKING_DETAILS_SCHEMA = {
     'type': 'object',
+    'additionalProperties': False,
     'properties': {
         'offer_id': {
             'type': 'uuint'
