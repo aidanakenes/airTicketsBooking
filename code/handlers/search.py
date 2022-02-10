@@ -11,4 +11,11 @@ async def search(request):
 
 
 async def search_by_id(request, search_id):
-    return response.json({'test': search_id})
+
+    search_results_by_id = {
+      "search_id": "d9e0cf5a-6bb8-4dae-8411-6caddcfd52da",
+      "status": "PENDING",
+      "items": [...]
+    }
+
+    return response.json(search_results_by_id)
