@@ -1,4 +1,7 @@
 from sanic import Sanic, response
+import jsonschema
+
+from .. import schemas
 
 
 async def create_booking(request):
@@ -108,6 +111,8 @@ async def create_booking(request):
 
 
 async def booking_details(request, booking_id):
+
+    jsonschema.validate(request.json, schema=schemas.BOOKING_DETAILS_SCHEMA)
 
     booking_details_result = {
         "id": "ecdea60d-4b85-4f8b-98d0-4da07bb02f99",

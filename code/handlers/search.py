@@ -1,7 +1,11 @@
 from sanic import Sanic, response
+import jsonschema
+
+from .. import schemas
 
 
 async def search(request):
+    jsonschema.validate(request.json, schema=schemas.SEARCH_SCHEMA)
 
     search_results = {
         "id": "d9e0cf5a-6bb8-4dae-8411-6caddcfd52da"
