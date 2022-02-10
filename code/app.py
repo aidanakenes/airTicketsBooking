@@ -9,7 +9,7 @@ def run():
     app.add_route(search.search, "/search", methods=["POST"])
     app.add_route(search.search_by_id, "/search/<search_id:int>", methods=["GET"])
 
-    app.add_route(offers.offers_by_id, "/offers/<offer_id:int>", methods=["GET"])
+    app.add_route(offers.offer_details, "/offers/<offer_id:int>", methods=["GET"])
 
     app.add_route(booking.booking, "/booking", methods=["POST"])
     app.add_route(booking.booking_by_id, "/booking/<booking_id:int>", methods=["GET"])
