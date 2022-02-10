@@ -20,13 +20,13 @@ SEARCH_SCHEMA = {
             'type': 'string'
         },
         'adults': {
-            'type': 'string'
+            'type': 'integer'
         },
         'children': {
-            'type': 'string'
+            'type': 'integer'
         },
         'infants': {
-            'type': 'string'
+            'type': 'integer'
         },
         'currency': {
             'type': 'string'
