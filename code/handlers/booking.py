@@ -141,9 +141,9 @@ async def booking_details(request, booking_id):
     return response.json(booking_details_result)
 
 
-async def get_bookings(request, email, phone):
+async def get_bookings(request):
 
-    print(email, phone)
+    print(request.args)
     booking_list = {'bookings': []}
 
     return response.json(booking_list)
