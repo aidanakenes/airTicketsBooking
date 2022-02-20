@@ -25,3 +25,8 @@ services:
 
     internship-db:
       image: postgres:14.1-alpine
+
+networks:
+    default:
+      external:
+        name: aviata-platform
