@@ -4,14 +4,17 @@ x-environment-vars: &environment-vars
   PYTHONUNBUFFERED: 1
   PYTHONIOENCODING: utf-8
   TERM: linux
+  DATABASE_URL: postgres://postgres@internship-db/postgres
 
 services:
-    sample-web-service:
+    internship-web:
         build:
             context: .
             dockerfile: ./docker/Dockerfile.local
         environment:
             <<: *environment-vars
+        depends_on:
+          - internship-db
         ports:
             - "8000:8000"
         volumes:
@@ -19,3 +22,6 @@ services:
         command: python -m code.app
         stdin_open: true
         tty: true
+
+    internship-db:
+      image: postgres:14.1-alpine
