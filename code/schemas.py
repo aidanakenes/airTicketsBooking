@@ -44,7 +44,7 @@ SEARCH_SCHEMA = {
     }
 }
 
-BOOKING_DETAILS_SCHEMA = {
+BOOKING_SCHEMA = {
     'type': 'object',
     'additionalProperties': False,
     'properties': {
@@ -117,3 +117,4 @@ BOOKING_DETAILS_SCHEMA = {
         'passengers'
     }
 }
+
