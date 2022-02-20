@@ -2,14 +2,14 @@ from sanic import Sanic, response
 import asyncpg
 
 from handlers import search, offers, booking
-from . import settings
+import settings
 
 app = Sanic('air-tickets-booking')
 
 
 @app.listener("before_server_start")
 async def init_before(app, loop):
-    app.db_pool = await asyncpg.create_pool(dsn=settings.DATABASE_URL)
+    app.ctx.db_pool = await asyncpg.create_pool(dsn=settings.DATABASE_URL, loop=loop)
 
 
 def run():
