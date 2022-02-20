@@ -49,7 +49,7 @@ BOOKING_SCHEMA = {
     'additionalProperties': False,
     'properties': {
         'offer_id': {
-            'type': 'uuint'
+            'type': 'string'
         },
         'phone': {
             'type': 'string'
@@ -58,7 +58,7 @@ BOOKING_SCHEMA = {
             'type': 'string'
         },
         'passengers': {
-            'type': 'object',
+            'type': 'array',
             'properties': {
                 'gender': {
                     'type': 'string'
@@ -91,14 +91,14 @@ BOOKING_SCHEMA = {
                             'type': 'string'
                         }
                     },
-                    'required': {
+                    'required': [
                         'number',
                         'expires_at',
                         'iin'
-                    }
+                    ]
                 }
             },
-            'required': {
+            'required': [
                 'gender',
                 'type',
                 'first_name',
@@ -106,15 +106,15 @@ BOOKING_SCHEMA = {
                 'date_of_birth',
                 'citizenship',
                 'document'
-            }
+            ]
 
         },
     },
-    'required': {
+    'required': [
         'offer_id',
         'phone',
         'email',
         'passengers'
-    }
+    ]
 }
 
