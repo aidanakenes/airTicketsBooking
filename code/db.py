@@ -1,11 +1,11 @@
 from datetime import datetime
 import json
 
-import helpers
+from helpers.decorators import with_connection
 import models
 
 
-@helpers.with_connection
+@with_connection
 async def create_booking(booking, *args, **kwargs):
     conn = kwargs.pop('connection')
 
@@ -49,7 +49,7 @@ async def _insert_booking(conn, booking, passenger_id, offer_details_id):
     return uid
 
 
-@helpers.with_connection
+@with_connection
 async def get_booking(booking_id, *args, **kwargs):
     conn = kwargs.pop('connection')
 
@@ -104,7 +104,7 @@ async def _select_passengers(conn, booking_id):
     return passengers
 
 
-@helpers.with_connection
+@with_connection
 async def get_bookings(email, phone, *args, **kwargs):
     conn = kwargs.pop('connection')
 
