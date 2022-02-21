@@ -53,14 +53,41 @@ async def _insert_booking(conn, booking, passenger_id, offer_details_id):
 async def get_booking(booking_id, *args, **kwargs):
     conn = kwargs.pop('connection')
 
-    data = await conn.fetchrow("""select b.offer_id, b.phone, b.email, od.details from booking b
-inner join offer_details od on b.offer_details_id=od.offer_details_id where offer_id=$1""", booking_id)
+    booking_data = await _select_booking(conn, booking_id)
 
-    passengers_data = await conn.fetch(
-        """select p.gender, p.ticket_type, p.first_name, p.last_name, p.date_of_birth, p.citizenship, p.numbers, p.expires_at, p.iin from passenger p inner join booking b on p.passenger_id=b.passenger_id where b.offer_id=$1""",
-        booking_id)
+    booking_data['passengers'] = await _select_passengers(conn, booking_id)
+
+    return models.Booking(booking_data)
+
+
+async def _select_booking(conn, booking_id):
+    stmt = """SELECT b.offer_id, b.phone, b.email, od.details 
+            FROM booking b
+            INNER JOIN offer_details od ON b.offer_details_id=od.offer_details_id 
+            WHERE offer_id=$1"""
+
+    booking_records = await conn.fetchrow(stmt, booking_id)
+
+    return {
+        'id': booking_id,
+        'phone': booking_records.get('phone'),
+        'email': booking_records.get('email'),
+        'offer': json.loads(booking_records.get('details')),
+        'passengers': None
+    }
+
+
+async def _select_passengers(conn, booking_id):
+    stmt = """SELECT p.gender, p.ticket_type, p.first_name, p.last_name, p.date_of_birth, 
+            p.citizenship, p.numbers, p.expires_at, p.iin 
+            FROM passenger p 
+            INNER JOIN booking b ON p.passenger_id=b.passenger_id 
+            WHERE b.offer_id=$1"""
+
+    passenger_records = await conn.fetch(stmt, booking_id)
+
     passengers = []
-    for p in passengers_data:
+    for p in passenger_records:
         passengers.append({
             'gender': p.get('gender'),
             'ticket_type': p.get('ticket_type'),
@@ -74,16 +101,7 @@ inner join offer_details od on b.offer_details_id=od.offer_details_id where offe
                 'expires_at': p.get('expires_at')
             }
         })
-
-    data = {
-        'id': booking_id,
-        'phone': data.get('phone'),
-        'email': data.get('email'),
-        'offer': json.loads(data.get('details')),
-        'passengers': passengers
-    }
-
-    return models.Booking(data)
+    return passengers
 
 
 @helpers.with_connection
@@ -93,27 +111,10 @@ async def get_bookings(email, phone, *args, **kwargs):
     rows = await conn.fetch(
         "select * from booking b inner join offer_details od on b.offer_details_id=od.offer_details_id where b.email=$1 and b.phone=$2;",
         email, phone)
-    print()
+
     bookings = []
     for row in rows:
-        passengers_data = await conn.fetch(
-            """select * from passenger p inner join booking b on p.passenger_id=b.passenger_id where b.offer_id=$1;""",
-            row.get('offer_id'))
-        passengers = []
-        for p in passengers_data:
-            passengers.append({
-                'gender': p.get('gender'),
-                'ticket_type': p.get('ticket_type'),
-                'first_name': p.get('first_name'),
-                'last_name': p.get('last_name'),
-                'date_of_birth': p.get('date_of_birth'),
-                'citizenship': p.get('citizenship'),
-                'document': {
-                    'number': p.get('numbers'),
-                    'iin': p.get('iin'),
-                    'expires_at': p.get('expires_at')
-                }
-            })
+        passengers = await _select_passengers(conn, row.get('offer_id'))
 
         bookings.append(models.Booking({
             'id': row.get('offer_id'),
