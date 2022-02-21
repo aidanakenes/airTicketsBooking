@@ -33,7 +33,7 @@ SEARCH_SCHEMA = {
             'type': 'string'
         },
     },
-    'required': {
+    'required': [
         'provider',
         'cabin',
         'origin',
@@ -41,7 +41,7 @@ SEARCH_SCHEMA = {
         'dep_at',
         'adults',
         'currency',
-    }
+    ]
 }
 
 BOOKING_SCHEMA = {
