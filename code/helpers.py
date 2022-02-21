@@ -9,7 +9,6 @@ def with_connection(f):
 
             except Exception as e:
                 await transaction.rollback()
-                print(e)
                 raise
             else:
                 await transaction.commit()
