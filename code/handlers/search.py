@@ -1,25 +1,29 @@
 from sanic import Sanic, response
 import jsonschema
+import httpx
+import aioredis
+
+import json
 
 import schemas
+import cache
 
 
 async def search(request):
     jsonschema.validate(request.json, schema=schemas.SEARCH_SCHEMA)
 
-    search_results = {
-        "id": "d9e0cf5a-6bb8-4dae-8411-6caddcfd52da"
-    }
+    async with httpx.AsyncClient() as client:
+        resp = await client.post('https://avia-api.k8s-test.aviata.team/offers/search', json=request.json, timeout=30)
+        search_results = {
+            'id': resp.json().get('items')[0].get('id')
+        }
+
+    await cache.cache_search(request, search_results.get('id'))
 
     return response.json(search_results)
 
 
 async def search_by_id(request, search_id):
+    search_results_by_id = await cache.get_cache(request, search_id)
 
-    search_results_by_id = {
-      "search_id": "d9e0cf5a-6bb8-4dae-8411-6caddcfd52da",
-      "status": "PENDING",
-      "items": [...]
-    }
-
-    return response.json(search_results_by_id)
+    return response.json(search_results_by_id, dumps=json.dumps, default=str)
