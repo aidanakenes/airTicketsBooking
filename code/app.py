@@ -1,5 +1,8 @@
 from sanic import Sanic, response
 import asyncpg
+import aioredis
+
+import traceback
 
 from handlers import search, offers, booking
 import settings
@@ -9,10 +12,23 @@ app = Sanic('air-tickets-booking')
 
 async def init_before(app, loop):
     app.ctx.db_pool = await asyncpg.create_pool(dsn=settings.DATABASE_URL, loop=loop)
+    app.ctx.redis = aioredis.from_url(settings.REDIS_URL, decode_responses=True, max_connections=50)
+
+
+async def cleanup(app, loop):
+    await app.ctx.redis.close()
+
+
+async def server_error_handler(request, error: Exception):
+    traceback.print_tb(error.__traceback__)
+    status_code = error.status_code if hasattr(error, 'status_code') else 500
+    return response.json({'error': str(error)}, status_code)
 
 
 def run():
     app.register_listener(init_before, "before_server_start")
+    app.register_listener(cleanup, "after_server_stop")
+    app.error_handler.add(Exception, server_error_handler)
 
     app.add_route(search.search, "/search", methods=["POST"])
     app.add_route(search.search_by_id, "/search/<search_id:uuid>", methods=["GET"])
