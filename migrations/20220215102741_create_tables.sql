@@ -1,7 +1,7 @@
 -- migrate:up
 
-CREATE TABLE IF NOT EXISTS provider_details (
-   provider_details_id INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS offer_details (
+   offer_details_id SERIAL PRIMARY KEY,
    details json NOT NULL
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS booking (
    offer_id VARCHAR(256) PRIMARY KEY,
    phone VARCHAR(256),
    email VARCHAR(256),
-   provider_details_id INT REFERENCES provider_details (provider_details_id),
+   offer_details_id INT REFERENCES offer_details (offer_details_id),
    passenger_id INT REFERENCES passenger (passenger_id)
 );
 
