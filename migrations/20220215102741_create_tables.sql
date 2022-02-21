@@ -5,13 +5,6 @@ CREATE TABLE IF NOT EXISTS offer_details (
     details json NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS documents (
-    document_id SERIAL PRIMARY KEY,
-    numbers VARCHAR(256),
-    expires_at DATE,
-    iin VARCHAR(256)
-);
-
 CREATE TABLE IF NOT EXISTS passenger (
     passenger_id SERIAL PRIMARY KEY,
     ticket_type VARCHAR(256),
@@ -19,7 +12,9 @@ CREATE TABLE IF NOT EXISTS passenger (
     last_name VARCHAR(256),
     date_of_birth DATE,
     citizenship VARCHAR(256),
-    document_id INT REFERENCES documents (document_id)
+    numbers VARCHAR(256),
+    expires_at DATE,
+    iin VARCHAR(256)
 
 );
 
