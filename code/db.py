@@ -90,7 +90,7 @@ async def _select_passengers(conn, booking_id):
 @with_connection
 async def get_bookings(email, phone, limit, *args, **kwargs):
     conn = kwargs.pop('connection')
-    stmt = """SELECT * FROM booking b 
+    stmt = """SELECT b.offer_id, b.phone, b.email, od.details FROM booking b 
         INNER JOIN offer_details od ON b.offer_details_id=od.offer_details_id 
         WHERE b.email=$1 AND b.phone=$2 
         LIMIT $3;"""
@@ -101,12 +101,9 @@ async def get_bookings(email, phone, limit, *args, **kwargs):
     for row in rows:
         passengers = await _select_passengers(conn, row.get('offer_id'))
 
-        bookings.append(models.Booking({
-            'id': row.get('offer_id'),
-            'phone': row.get('phone'),
-            'email': row.get('email'),
-            'offer': json.loads(row.get('details')),
-            'passengers': passengers
-        }))
+        booking_obj = models.Booking(row)
+        booking_obj.passengers = passengers
 
-        return bookings
+        bookings.append(booking_obj)
+
+    return bookings

@@ -31,7 +31,7 @@ async def booking_details(request, booking_id):
 
 
 async def get_bookings(request):
-    booking_list = await db.get_bookings(request.app.ctx.db_pool, request.args.get('email'), request.args.get('phone'))
+    booking_list = await db.get_bookings(request.app.ctx.db_pool, request.args.get('email'), request.args.get('phone'), int(request.args.get('limit')))
 
     # %2B = + in url encoding
     return response.json([b.__dict__() for b in booking_list], dumps=json.dumps, default=str)
