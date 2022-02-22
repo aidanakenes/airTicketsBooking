@@ -7,6 +7,10 @@ async def generate_search_key(search_id):
     return f'inernship: {search_id}'
 
 
+async def generate_currency_key(search_id):
+    return f'currency'
+
+
 async def save_search(redis, search_data, search_id):
     await redis.setex(
         generate_search_key(search_id),
@@ -24,14 +28,14 @@ async def get_search(redis, search_id):
 
 async def save_currency(redis, currency_details):
     await redis.setex(
-        f'currency',
+        generate_currency_key(),
         settings.REDIS_CURRENCY_TTL,
         json.dumps(currency_details)
     )
 
 
 async def get_currency(redis):
-    data = await redis.get(f'currency')
+    data = await redis.get(generate_currency_key())
 
     if data:
         return json.loads(data)
