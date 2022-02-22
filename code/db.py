@@ -88,14 +88,13 @@ async def _select_passengers(conn, booking_id):
 
 
 @with_connection
-async def get_bookings(email, phone, limit, *args, **kwargs):
+async def get_bookings(email, phone, *args, **kwargs):
     conn = kwargs.pop('connection')
     stmt = """SELECT b.offer_id, b.phone, b.email, od.details FROM booking b 
         INNER JOIN offer_details od ON b.offer_details_id=od.offer_details_id 
-        WHERE b.email=$1 AND b.phone=$2 
-        LIMIT $3;"""
+        WHERE b.email=$1 AND b.phone=$2;"""
 
-    rows = await conn.fetch(stmt, email, phone, limit)
+    rows = await conn.fetch(stmt, email, phone)
 
     bookings = []
     for row in rows:

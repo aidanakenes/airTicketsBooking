@@ -31,7 +31,20 @@ async def booking_details(request, booking_id):
 
 
 async def get_bookings(request):
-    booking_list = await db.get_bookings(request.app.ctx.db_pool, request.args.get('email'), request.args.get('phone'), int(request.args.get('limit')))
-
     # %2B = + in url encoding
-    return response.json([b.__dict__() for b in booking_list], dumps=json.dumps, default=str)
+    booking_list = await db.get_bookings(request.app.ctx.db_pool,
+                                         request.args.get('email'),
+                                         request.args.get('phone'))
+    booking_pagination = []
+    limit = int(request.args.get('limit'))
+    total = len(booking_list)
+
+    for page in range(0, total, limit):
+        booking_pagination.append({
+            'page': page,
+            'items': [b.__dict__() for b in booking_list[page: page + limit]],
+            'limit': limit,
+            'total': total
+        })
+
+    return response.json(booking_pagination[int(request.args.get('page'))], dumps=json.dumps, default=str)
