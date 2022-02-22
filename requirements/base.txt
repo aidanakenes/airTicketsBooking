@@ -3,3 +3,4 @@ jsonschema==4.*
 asyncpg==0.25.*
 httpx==0.22.*
 aioredis==2.0.*
+APScheduler==3.*
