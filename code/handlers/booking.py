@@ -36,8 +36,10 @@ async def get_bookings(request):
                                          request.args.get('email'),
                                          request.args.get('phone'))
     booking_pagination = []
-    limit = int(request.args.get('limit'))
     total = len(booking_list)
+    limit = int(request.args.get('limit'))
+    if limit > total:
+        limit = total
 
     for page in range(0, total, limit):
         booking_pagination.append({
@@ -47,4 +49,8 @@ async def get_bookings(request):
             'total': total
         })
 
-    return response.json(booking_pagination[int(request.args.get('page'))], dumps=json.dumps, default=str)
+    page = int(request.args.get('page'))
+    if page > len(booking_pagination):
+        page = 0
+
+    return response.json(booking_pagination[page], dumps=json.dumps, default=str)
