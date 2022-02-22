@@ -18,9 +18,6 @@ class Passenger:
         self.document_iin = dict(raw_data.get('document')).get('iin') if not raw_data.get('iin') else raw_data.get(
             'iin')
 
-    def serialize_from_db(self, records):
-        pass
-
 
 class Booking:
 
@@ -43,6 +40,3 @@ class Booking:
             'offer': self.offer,
             'passengers': [p.__dict__ for p in self.passengers]
         }
-
-    def serialize_from_db(self, records):
-        pass
