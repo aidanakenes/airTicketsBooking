@@ -4,7 +4,7 @@ import settings
 
 
 async def generate_search_key(search_id):
-    return f'internship: {search_id}'
+    return f'search: {search_id}'
 
 
 async def generate_currency_key():
@@ -12,30 +12,53 @@ async def generate_currency_key():
 
 
 async def save_search(redis, search_data, search_id):
+    search_key = await generate_search_key(search_id)
+
     await redis.setex(
-        generate_search_key(search_id),
+        search_key,
         settings.REDIS_SEARCH_TTL,
         json.dumps(search_data),
     )
 
 
 async def get_search(redis, search_id):
-    data = await redis.get(generate_search_key(search_id))
+    search_key = await generate_search_key(search_id)
+
+    data = await redis.get(search_key)
 
     if data:
         return json.loads(data)
 
 
+async def get_offer(redis, offer_id):
+    cur = b'0'
+    while cur:
+        cur, keys = await redis.scan(cur, match='search:*')
+        for key in keys:
+            search_cache = await redis.get(key)
+
+            if search_cache:
+                search_cache = json.loads(search_cache)
+
+                for offer_cache in search_cache.get('items'):
+                    if offer_cache.get('id') == offer_id:
+                        return offer_cache
+
+
 async def save_currency(redis, currency_details):
+    currency_key = await generate_currency_key()
+
     await redis.setex(
-        generate_currency_key(),
+        currency_key,
         settings.REDIS_CURRENCY_TTL,
         json.dumps(currency_details)
     )
 
 
 async def get_currency(redis):
-    data = await redis.get(generate_currency_key())
+    currency_key = await generate_currency_key()
+
+    data = await redis.get(currency_key)
 
     if data:
         return json.loads(data)
