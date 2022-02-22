@@ -55,9 +55,9 @@ async def get_booking(booking_id, *args, **kwargs):
 
     booking_data = await _select_booking(conn, booking_id)
 
-    booking_data['passengers'] = await _select_passengers(conn, booking_id)
+    booking_data.passengers = await _select_passengers(conn, booking_id)
 
-    return models.Booking(booking_data)
+    return booking_data
 
 
 async def _select_booking(conn, booking_id):
@@ -68,13 +68,7 @@ async def _select_booking(conn, booking_id):
 
     booking_records = await conn.fetchrow(stmt, booking_id)
 
-    return {
-        'id': booking_id,
-        'phone': booking_records.get('phone'),
-        'email': booking_records.get('email'),
-        'offer': json.loads(booking_records.get('details')),
-        'passengers': None
-    }
+    return models.Booking(booking_records)
 
 
 async def _select_passengers(conn, booking_id):
@@ -88,29 +82,20 @@ async def _select_passengers(conn, booking_id):
 
     passengers = []
     for p in passenger_records:
-        passengers.append({
-            'gender': p.get('gender'),
-            'ticket_type': p.get('ticket_type'),
-            'first_name': p.get('first_name'),
-            'last_name': p.get('last_name'),
-            'date_of_birth': p.get('date_of_birth'),
-            'citizenship': p.get('citizenship'),
-            'document': {
-                'number': p.get('numbers'),
-                'iin': p.get('iin'),
-                'expires_at': p.get('expires_at')
-            }
-        })
+        passengers.append(models.Passenger(p))
+
     return passengers
 
 
 @with_connection
-async def get_bookings(email, phone, *args, **kwargs):
+async def get_bookings(email, phone, limit, *args, **kwargs):
     conn = kwargs.pop('connection')
+    stmt = """SELECT * FROM booking b 
+        INNER JOIN offer_details od ON b.offer_details_id=od.offer_details_id 
+        WHERE b.email=$1 AND b.phone=$2 
+        LIMIT $3;"""
 
-    rows = await conn.fetch(
-        "select * from booking b inner join offer_details od on b.offer_details_id=od.offer_details_id where b.email=$1 and b.phone=$2;",
-        email, phone)
+    rows = await conn.fetch(stmt, email, phone, limit)
 
     bookings = []
     for row in rows:
