@@ -30,11 +30,11 @@ async def cleanup(app, loop):
 async def server_error_handler(request, error: Exception):
     traceback.print_tb(error.__traceback__)
     status_code = error.status_code if hasattr(error, 'status_code') else 500
-    return response.json({'error': str(error)}, status_code)
+    return response.json({'error': str(error.__dict__)}, status_code)
 
 
 @decorators.retry(exc_to_check=TimeoutException, tries=2, delay=2)
-async def currency_update(app, loop):
+async def currency_update(app):
     if await cache.get_currency(app.ctx.redis) is None:
         async with httpx.AsyncClient() as client:
             resp = await client.get(
@@ -53,10 +53,11 @@ def run():
     scheduler.add_job(
         currency_update,
         trigger='cron',
+        args=(app,),
         minute=59,
         hour=23,
         max_instances=1,
-        replace_existing=True
+        replace_existing=True,
     )
 
     scheduler.start()
