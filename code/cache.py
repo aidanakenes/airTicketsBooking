@@ -7,7 +7,7 @@ async def generate_search_key(search_id):
     return f'internship: {search_id}'
 
 
-async def generate_currency_key(search_id):
+async def generate_currency_key():
     return f'currency'
 
 
