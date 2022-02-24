@@ -24,10 +24,10 @@ async def save_search(redis, search_data, search_id):
 async def get_search(redis, search_id):
     search_key = await generate_search_key(search_id)
 
-    data = await redis.get(search_key)
+    if value := await redis.get(search_key):
+        value = json.loads(value)
 
-    if data:
-        return json.loads(data)
+    return value
 
 
 async def get_offer(redis, offer_id):
