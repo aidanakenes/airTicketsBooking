@@ -16,7 +16,7 @@ async def save_search(redis, search_data, search_id):
 
     await redis.setex(
         search_key,
-        settings.REDIS_SEARCH_TTL,
+        settings.SEARCH_RESULTS_REDIS_TTL,
         json.dumps(search_data),
     )
 
@@ -50,7 +50,7 @@ async def save_currency(redis, currency_details):
 
     await redis.setex(
         currency_key,
-        settings.REDIS_CURRENCY_TTL,
+        settings.CURRENCY_RESULTS_REDIS_TTL,
         json.dumps(currency_details)
     )
 

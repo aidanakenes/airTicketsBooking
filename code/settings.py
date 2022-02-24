@@ -1,5 +1,6 @@
 import os
 
-DATABASE_URL = os.environ['booking']
-REDIS_URL = os.environ['search']
-REDIS_TTL = os.environ['cache_ttl']
+DATABASE_URL = os.environ['POSTGRES_DSN']
+REDIS_URL = os.environ['REDIS_DSN']
+SEARCH_RESULTS_REDIS_TTL = os.environ['SEARCH_RESULTS_REDIS_TTL']
+CURRENCY_RESULTS_REDIS_TTL = os.environ['CURRENCY_RESULTS_REDIS_TTL']
