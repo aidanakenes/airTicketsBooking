@@ -7,7 +7,6 @@ import schemas
 import jsonschema_
 import db
 import models
-from helpers import errors
 from aviata_client import AviataClient
 
 
