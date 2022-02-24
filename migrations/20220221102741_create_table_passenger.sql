@@ -2,14 +2,14 @@
 
 CREATE TABLE IF NOT EXISTS passenger (
     passenger_id SERIAL PRIMARY KEY,
-    ticket_type VARCHAR(256),
-    first_name VARCHAR(256),
-    last_name VARCHAR(256),
+    ticket_type VARCHAR(20),
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
     date_of_birth DATE,
-    citizenship VARCHAR(256),
-    numbers VARCHAR(256),
+    citizenship VARCHAR(4),
+    numbers VARCHAR(10),
     expires_at DATE,
-    iin VARCHAR(256)
+    iin VARCHAR(16)
 
 );
 
