@@ -1,20 +1,17 @@
 from sanic import Sanic, response
-import jsonschema
 import httpx
 
 import json
 
 import schemas
+import jsonschema_
 import cache
 from helpers.helpers import convert_currency
 from helpers import errors
 
 
 async def search(request):
-    try:
-        jsonschema.validate(request.json, schema=schemas.SEARCH_SCHEMA)
-    except jsonschema.ValidationError as e:
-        raise errors.InvalidParams()
+    jsonschema_.validate(request, schemas.SEARCH_SCHEMA)
 
     if request.json.get('adults') < 1 and request.json.get('children') < 1 and request.json.get('infants') < 1:
         raise errors.PassengersNumberError()

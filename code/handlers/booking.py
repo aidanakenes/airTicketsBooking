@@ -1,20 +1,17 @@
 from sanic import Sanic, response
-import jsonschema
 
 import json
 import httpx
 
 import schemas
+import jsonschema_
 import db
 import models
 from helpers import errors
 
 
 async def create_booking(request):
-    try:
-        jsonschema.validate(request.json, schema=schemas.BOOKING_SCHEMA)
-    except Exception as e:
-        raise errors.InvalidParams()
+    jsonschema_.validate(request, schemas.BOOKING_SCHEMA)
 
     booking_result = await _get_provider_booking(request.json)
     booking_obj = models.Booking(booking_result.json())
