@@ -7,6 +7,7 @@ import schemas
 import jsonschema_
 import cache
 from helpers.helpers import convert_currency
+from aviata_client import AviataClient
 from helpers import errors
 
 
@@ -16,7 +17,7 @@ async def search(request):
     if request.json.get('adults') < 1 and request.json.get('children') < 1 and request.json.get('infants') < 1:
         raise errors.PassengersNumberError()
 
-    provider_response = await _get_provider_search(request.json)
+    provider_response = await AviataClient().get_booking_request(request.json, 'search')
     search_results = {
         'search_id': provider_response.json().get('search_id')
     }
