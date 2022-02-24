@@ -14,3 +14,5 @@ CREATE TABLE IF NOT EXISTS passenger (
 );
 
 -- migrate:down
+
+DROP TABLE IF EXISTS passenger CASCADE;

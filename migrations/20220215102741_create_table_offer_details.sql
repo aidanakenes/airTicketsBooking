@@ -6,3 +6,5 @@ CREATE TABLE IF NOT EXISTS offer_details (
 );
 
 -- migrate:down
+
+DROP TABLE IF EXISTS offer_details CASCADE;

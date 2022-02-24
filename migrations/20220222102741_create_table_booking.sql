@@ -14,3 +14,5 @@ CREATE INDEX index_phone_mail on booking (
 );
 
 -- migrate:down
+
+DROP TABLE IF EXISTS booking CASCADE;
