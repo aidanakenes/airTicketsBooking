@@ -2,11 +2,7 @@ import cache
 
 
 async def convert_currency(request, data, currency):
-    currency_cache = await cache.get_currency(request.app.ctx.redis)
-    currency_price = 1.0
-
-    for cur in currency_cache.get('rates').get('item'):
-        currency_price = cur.get('description')
+    currency_price = await cache.get_currency(request.app.ctx.redis, currency)
 
     for r in data.get('items'):
         r['price']['amount'], r['price']['currency'] = round(

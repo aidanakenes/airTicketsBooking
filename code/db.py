@@ -8,12 +8,10 @@ import models
 @with_connection
 async def create_booking(booking, *args, **kwargs):
     conn = kwargs.pop('connection')
-    booking_id = -1
 
-    for passenger in booking.passengers:
-        passenger_id = await _insert_passenger(conn, passenger)
-        offer_details_id = await _insert_offer(conn, booking)
-        booking_id = await _insert_booking(conn, booking, passenger_id, offer_details_id)
+    passenger_id = await _insert_passenger(conn, booking.passengers)
+    offer_details_id = await _insert_offer(conn, booking.offer)
+    booking_id = await _insert_booking(conn, booking, passenger_id, offer_details_id)
 
     return booking_id
 
@@ -27,20 +25,20 @@ async def _insert_passenger(conn, passenger):
     return uid
 
 
-async def _insert_offer(conn, booking):
+async def _insert_offer(conn, offer):
     stmt = """INSERT INTO offer_details (details)
             VALUES ($1) RETURNING offer_details_id;"""
 
-    uid = await conn.fetchval(stmt, json.dumps(booking.offer))
+    uid = await conn.fetchval(stmt, json.dumps(offer))
 
     return uid
 
 
 async def _insert_booking(conn, booking, passenger_id, offer_details_id):
-    stmt = """INSERT INTO booking (booking_id, phone, email, offer_details_id, passenger_id)
-            VALUES ($1, $2, $3, $4, $5) RETURNING booking_id;"""
+    stmt = """INSERT INTO booking (booking_id, phone, email, created_at, offer_details_id, passenger_id)
+            VALUES ($1, $2, $3, $4, $5, $6) RETURNING booking_id;"""
 
-    uid = await conn.execute(stmt, booking.booking_id, booking.phone, booking.email,
+    uid = await conn.execute(stmt, booking.booking_id, booking.phone, booking.email, datetime.now(),
                              offer_details_id, passenger_id)
 
     return uid

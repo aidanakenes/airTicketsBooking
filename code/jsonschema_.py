@@ -4,7 +4,7 @@ from helpers import errors
 
 async def validate(request, schema):
     try:
-        await jsonschema.validate(
+        jsonschema.validate(
             request.json,
             schema=schema,
         )

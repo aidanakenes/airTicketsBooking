@@ -7,13 +7,13 @@ import schemas
 import jsonschema_
 import db
 import models
-from aviata_client import AviataClient
+from clients.aviata import AviataClient
 
 
 async def create_booking(request):
-    jsonschema_.validate(request, schemas.BOOKING_SCHEMA)
+    await jsonschema_.validate(request, schemas.BOOKING_SCHEMA)
 
-    booking_result = await AviataClient().get_booking_request(request.json, 'booking')
+    booking_result = await AviataClient().book(request.json)
     booking_obj = models.Booking(booking_result.json())
 
     await db.create_booking(request.app.ctx.db_pool, booking_obj)

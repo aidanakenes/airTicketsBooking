@@ -49,7 +49,7 @@ BOOKING_SCHEMA = {
     'additionalProperties': False,
     'properties': {
         'offer_id': {
-            'type': 'uuid'
+            'type': 'string'
         },
         'phone': {
             'type': 'string'

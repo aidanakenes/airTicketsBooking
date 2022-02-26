@@ -8,6 +8,11 @@ class SearchNotFound(Exception):
     status_code: int = 404
 
 
+class BookNotFound(Exception):
+    msg: str = 'Нет данных по результатам поиска брони'
+    status_code: int = 404
+
+
 class InvalidParams(Exception):
     msg: str = 'Неправльно указаны параметры'
     status_code: int = 404
