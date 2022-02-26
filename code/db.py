@@ -8,33 +8,31 @@ import models
 @with_connection
 async def create_booking(booking, *args, **kwargs):
     conn = kwargs.pop('connection')
+    booking_id = -1
 
     for passenger in booking.passengers:
-        passenger_uid = await _insert_passenger(conn, passenger)
-        offer_details_uid = await _insert_offer(conn, booking)
-        booking_id = await _insert_booking(conn, booking, passenger_uid, offer_details_uid)
+        passenger_id = await _insert_passenger(conn, passenger)
+        offer_details_id = await _insert_offer(conn, booking)
+        booking_id = await _insert_booking(conn, booking, passenger_id, offer_details_id)
 
     return booking_id
 
 
 async def _insert_passenger(conn, passenger):
-    expires_at = datetime.strptime(passenger.date_of_birth, '%Y-%m-%d')
-    date_of_birth = datetime.strptime(passenger.date_of_birth, '%Y-%m-%d')
 
-    stmt = """INSERT INTO passenger (gender, ticket_type, first_name, last_name, date_of_birth, citizenship, numbers, expires_at, iin)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
-            RETURNING passenger_id;"""
+    stmt = """INSERT INTO passenger (info)
+            VALUES ($1) RETURNING passenger_id;"""
 
-    uid = await conn.fetchval(stmt, passenger.gender, passenger.ticket_type, passenger.first_name,
-                              passenger.last_name, date_of_birth, passenger.citizenship,
-                              passenger.document_number, expires_at, passenger.document_iin)
+    uid = await conn.fetchval(stmt, json.dumps(passenger))
 
     return uid
 
 
 async def _insert_offer(conn, booking):
+
     stmt = """INSERT INTO offer_details (details)
             VALUES ($1) RETURNING offer_details_id;"""
+
     uid = await conn.fetchval(stmt, json.dumps(booking.offer))
 
     return uid
