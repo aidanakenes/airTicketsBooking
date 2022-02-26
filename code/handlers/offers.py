@@ -8,7 +8,7 @@ from helpers import errors
 
 async def offer_details(request, offer_id):
 
-    offer_details_result = await cache.get_offer(request.app.ctx.redis, offer_id)
+    offer_details_result = await cache.get_offer_results(request.app.ctx.redis, offer_id)
 
     if offer_details_result is None:
         raise errors.SearchNotFound()

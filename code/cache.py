@@ -11,7 +11,7 @@ async def generate_currency_key():
     return f'currency'
 
 
-async def save_search(redis, search_data, search_id):
+async def save_search_results(redis, search_data, search_id):
     search_key = await generate_search_key(search_id)
 
     await redis.setex(
@@ -21,7 +21,7 @@ async def save_search(redis, search_data, search_id):
     )
 
 
-async def get_search(redis, search_id):
+async def get_search_results(redis, search_id):
     search_key = await generate_search_key(search_id)
 
     if value := await redis.get(search_key):
@@ -30,7 +30,7 @@ async def get_search(redis, search_id):
     return value
 
 
-async def get_offer(redis, offer_id):
+async def get_offer_results(redis, offer_id):
     cur = b'0'
     while cur:
         cur, keys = await redis.scan(cur, match='search:*')

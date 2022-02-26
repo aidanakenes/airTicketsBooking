@@ -22,13 +22,13 @@ async def search(request):
         'search_id': provider_response.json().get('search_id')
     }
     data = await convert_currency(request, provider_response.json(), request.json.get('currency'))
-    await cache.save_search(request.app.ctx.redis, data, search_results.get('search_id'))
+    await cache.save_search_results(request.app.ctx.redis, data, search_results.get('search_id'))
 
     return response.json(search_results)
 
 
 async def search_by_id(request, search_id):
-    search_results_by_id = await cache.get_search(request.app.ctx.redis, search_id)
+    search_results_by_id = await cache.get_search_results(request.app.ctx.redis, search_id)
 
     return response.json(search_results_by_id, dumps=json.dumps, default=str)
 
