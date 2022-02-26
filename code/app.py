@@ -29,7 +29,6 @@ def run():
     app.register_listener(init_before, "before_server_start")
     app.register_listener(cleanup, "after_server_stop")
 
-    scheduler.start()
     app.error_handler.add(Exception, server_error_handler)
 
     app.add_route(search.search, "/search", methods=["POST"])
