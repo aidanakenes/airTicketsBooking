@@ -39,8 +39,10 @@ async def _insert_offer(conn, booking):
 
 
 async def _insert_booking(conn, booking, passenger_id, offer_details_id):
-    stmt = """INSERT INTO booking (offer_id, phone, email, offer_details_id, passenger_id)
-            VALUES ($1, $2, $3, $4, $5) RETURNING offer_id;"""
+
+    stmt = """INSERT INTO booking (booking_id, phone, email, offer_details_id, passenger_id)
+            VALUES ($1, $2, $3, $4, $5) RETURNING booking_id;"""
+
     uid = await conn.execute(stmt, booking.booking_id, booking.phone, booking.email,
                              offer_details_id, passenger_id)
 
