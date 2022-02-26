@@ -1,7 +1,6 @@
 from sanic import Sanic, response
 import asyncpg
 import aioredis
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 import traceback
 
@@ -9,7 +8,6 @@ from handlers import search, offers, booking
 import settings
 
 app = Sanic('air-tickets-booking')
-scheduler = AsyncIOScheduler()
 
 
 async def init_before(app, loop):
