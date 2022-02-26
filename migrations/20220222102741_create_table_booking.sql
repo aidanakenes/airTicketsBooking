@@ -1,7 +1,7 @@
 -- migrate:up
 
 CREATE TABLE IF NOT EXISTS booking (
-    booking_id VARCHAR(256) PRIMARY KEY,
+    booking_id uuid PRIMARY KEY,
     phone VARCHAR(12),
     email VARCHAR(100),
     created_at TIMESTAMP,
