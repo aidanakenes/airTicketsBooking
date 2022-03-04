@@ -1,19 +1,18 @@
 from sanic import Sanic, response
 
 import json
-import httpx
 
 import schemas
 import jsonschema_
 import db
 import models
-from clients.aviata import AviataClient
+from clients.aviata import Client
 
 
 async def create_booking(request):
-    await jsonschema_.validate(request, schemas.BOOKING_SCHEMA)
+    await jsonschema_.validate(request.json, schemas.BOOKING_SCHEMA)
 
-    booking_result = await AviataClient().book(request.json)
+    booking_result = await Client(base_url='https://avia-api.k8s-test.aviata.team').book(**json.loads(request.body))
     booking_obj = models.Booking(booking_result.json())
 
     await db.create_booking(request.app.ctx.db_pool, booking_obj)
