@@ -24,16 +24,3 @@ class NationalBankClient(Client):
             raise errors.BookNotFound()
 
         return xmltodict.parse(provider_response.text)
-
-# @decorators.retry(exc_to_check=TimeoutException, tries=2, delay=2)
-# async def currency_update(app):
-#     if await cache.get_currency(app.ctx.redis) is None:
-#         async with httpx.AsyncClient() as client:
-#             resp = await client.get(
-#                 'https://www.nationalbank.kz/rss/get_rates.cfm',
-#                 params={'fdate': datetime.today().strftime('%d.%m.%Y')},
-#                 timeout=30,
-#             )
-#
-#             data = xmltodict.parse(resp.text)
-#             await cache.save_currency(app.ctx.redis, data)
