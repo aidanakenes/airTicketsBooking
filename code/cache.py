@@ -32,7 +32,7 @@ async def get_search_results(redis, search_id):
         'items': []
     }
     while cur:
-        cur, keys = await redis.scan(cur, match=search_key)
+        cur, keys = await redis.scan(cur, match=search_key, count=30)
         for key in keys:
             search_cache = await redis.get(key)
 
@@ -47,7 +47,7 @@ async def get_offer_results(redis, offer_id):
 
     cur = b'0'
     while cur:
-        cur, keys = await redis.scan(cur, match=search_offer_key)
+        cur, keys = await redis.scan(cur, match=search_offer_key, count=40)
         for key in keys:
             offer_cache = await redis.get(key)
 
