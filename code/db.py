@@ -24,12 +24,12 @@ async def _insert_offer(conn, offer):
     return uid
 
 
-async def _insert_booking(conn, booking, passenger_id, offer_details_id):
-    stmt = """INSERT INTO booking (booking_id, phone, email, created_at, passengers, offer_details_id, passenger_id)
+async def _insert_booking(conn, booking, offer_details_id):
+    stmt = """INSERT INTO booking (booking_id, phone, email, created_at, passengers, offer_details_id)
             VALUES ($1, $2, $3, $4, $5, $6) RETURNING booking_id;"""
 
     uid = await conn.execute(stmt, booking.booking_id, booking.phone, booking.email, datetime.now(),
-                             json.dumps(booking.passengers), offer_details_id, passenger_id)
+                             json.dumps(booking.passengers), offer_details_id)
 
     return uid
 
