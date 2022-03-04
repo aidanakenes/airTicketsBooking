@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS booking (
     phone VARCHAR(12),
     email VARCHAR(100),
     created_at TIMESTAMP,
-    offer_details_id INT REFERENCES offer_details (offer_details_id),
-    passenger_id INT REFERENCES passenger (passenger_id)
+    passengers json NOT NULL,
+    offer_details_id INT REFERENCES offer_details (offer_details_id)
 );
 
 CREATE INDEX index_phone_mail on booking (
