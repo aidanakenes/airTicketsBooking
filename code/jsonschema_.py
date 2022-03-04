@@ -2,10 +2,10 @@ import jsonschema
 from helpers import errors
 
 
-async def validate(request, schema):
+async def validate(request_data, schema):
     try:
         jsonschema.validate(
-            request.json,
+            request_data,
             schema=schema,
         )
     except Exception as e:
