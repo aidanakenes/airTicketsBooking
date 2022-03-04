@@ -1,34 +1,41 @@
 from helpers import errors
-from clients import Client
+from . import Client as BaseClient
 
 
-class AviataClient(Client):
+class Client(BaseClient):
+    def __init__(self, base_url, *args, **kwargs):
+        super().__init__(base_url, *args, **kwargs)
 
-    def __init__(self):
-        super(AviataClient, self).__init__()
+    async def book(self, offer_id, phone, email, passengers):
+        data = {
+            'offer_id': offer_id,
+            'phone': phone,
+            'email': email,
+            'passengers': passengers,
+        }
 
-        self._home = 'https://avia-api.k8s-test.aviata.team'
-        self._book_endpoint = '/offers/booking'
-        self._search_endpoint = '/offers/search'
-
-    async def book(self, params):
-        provider_response = await super()._request(
-            'POST',
-            params,
-            f'{self._home}{self._book_endpoint}',
-        )
+        provider_response = await self.post(url='/offers/booking', json=data)
 
         if provider_response is None:
             raise errors.BookNotFound()
 
         return provider_response
 
-    async def search(self, params):
-        provider_response = await super()._request(
-            'POST',
-            params,
-            f'{self._home}{self._search_endpoint}',
-        )
+    async def search(self, provider, cabin, origin, destination, dep_at, arr_at, adults, children, infants, currency):
+        data = {
+            "provider": provider,
+            "cabin": cabin,
+            "origin": origin,
+            "destination": destination,
+            "dep_at": dep_at,
+            "arr_at": arr_at,
+            "adults": adults,
+            "children": children,
+            "infants": infants,
+            "currency": currency
+        }
+
+        provider_response = await self.post(url='/offers/search', json=data)
 
         if provider_response is None:
             raise errors.SearchNotFound()

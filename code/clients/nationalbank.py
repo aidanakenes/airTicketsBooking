@@ -1,24 +1,22 @@
 from helpers import errors
-from clients import Client
+from . import Client as BaseClient
 
 from datetime import datetime
 
 import xmltodict
 
 
-class NationalBankClient(Client):
+class Client(BaseClient):
 
-    def __init__(self):
-        super(NationalBankClient, self).__init__()
-
-        self._home = 'https://www.nationalbank.kz/rss/get_rates.cfm'
+    def __init__(self, base_url, *args, **kwargs):
+        super().__init__(base_url, *args, **kwargs)
 
     async def get_currency_results(self):
-        provider_response = await super()._request(
-            'GET',
-            {'fdate': datetime.today().strftime('%d.%m.%Y')},
-            f'{self._home}',
-        )
+        params = {
+            'fdate': datetime.today().strftime('%d.%m.%Y'),
+        }
+
+        provider_response = await self.get(url='/rss/get_rates.cfm', params=params)
 
         if provider_response is None:
             raise errors.BookNotFound()
