@@ -62,7 +62,7 @@ async def save_currency(redis, currency_details):
         await redis.setex(
             currency_key,
             settings.CURRENCY_RESULTS_REDIS_TTL,
-            json.dumps(float(c.get('description')))
+            float(c.get('description')),
         )
 
 
