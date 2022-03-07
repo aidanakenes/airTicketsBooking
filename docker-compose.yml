@@ -4,7 +4,11 @@ x-environment-vars: &environment-vars
   PYTHONUNBUFFERED: 1
   PYTHONIOENCODING: utf-8
   TERM: linux
-  DATABASE_URL: postgres://postgres@internship-db/postgres
+  POSTGRES_HOST_AUTH_METHOD: trust
+  POSTGRES_DSN: postgresql://postgres@internship-db/postgres?sslmode=disable
+  REDIS_DSN: redis://internship-cache
+  SEARCH_RESULTS_REDIS_TTL: 1800
+  CURRENCY_RESULTS_REDIS_TTL: 86400
 
 services:
     internship-web:
@@ -14,8 +18,8 @@ services:
         environment:
             <<: *environment-vars
         depends_on:
+          - internship-scheduler
           - internship-db
-          - internship-cache
         ports:
             - "8000:8000"
         volumes:
@@ -24,13 +28,24 @@ services:
         stdin_open: true
         tty: true
 
+    internship-scheduler:
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile.local
+        environment:
+            <<: *environment-vars
+        depends_on:
+          - internship-cache
+        command: python -m code.scheduler
+        stdin_open: true
+        tty: true
+
     internship-db:
       image: postgres:14.1-alpine
+      environment:
+        <<: *environment-vars
 
     internship-cache:
       image: redis:7.0-rc1-alpine
-
-networks:
-    default:
-      external:
-        name: aviata-platform
+      environment:
+        <<: *environment-vars

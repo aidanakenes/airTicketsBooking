@@ -9,5 +9,13 @@ RUN pip install --no-cache-dir -r /tmp/requirements/dev.txt
 RUN useradd -m -d /proj -s /bin/bash app
 COPY . /proj
 WORKDIR /proj
+
+#================================================
+# Migrations tool
+#================================================
+ADD https://github.com/amacneil/dbmate/releases/download/v1.14.0/dbmate-linux-amd64 /usr/local/bin/dbmate
+RUN chmod +x /usr/local/bin/dbmate
+RUN chmod +x /proj/bin/*
+
 RUN chown -R app:app /proj/*
 USER app
