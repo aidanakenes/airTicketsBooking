@@ -33,23 +33,28 @@ async def get_bookings(request):
         request.args.get('email'),
         request.args.get('phone'),
     )
+    if booking_list:
+        booking_pagination = await _pagination(booking_list, int(request.args.get('page')), int(request.args.get('limit')))
 
+        return response.json(booking_pagination, dumps=json.dumps, default=str)
+
+
+async def _pagination(data, page, limit):
     booking_pagination = []
-    total = len(booking_list)
-    limit = int(request.args.get('limit'))
-    if limit > total:
-        limit = total
+    total = len(data)
 
-    for page in range(0, total, limit):
+    if limit > total:
+        limit = 1
+
+    for pagination in range(0, total, limit):
         booking_pagination.append({
-            'page': page,
-            'items': [b.__dict__() for b in booking_list[page: page + limit]],
+            'page': pagination,
+            'items': [b.__dict__() for b in data[page: pagination + limit]],
             'limit': limit,
             'total': total
         })
 
-    page = int(request.args.get('page'))
     if page > len(booking_pagination):
         page = 0
 
-    return response.json(booking_pagination[page], dumps=json.dumps, default=str)
+    return booking_pagination[page]
