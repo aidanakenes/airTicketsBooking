@@ -1,4 +1,4 @@
-import cache
+from code import cache
 
 
 async def convert_currency(request, data, currency):

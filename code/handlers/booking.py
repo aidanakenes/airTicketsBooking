@@ -2,11 +2,11 @@ from sanic import Sanic, response
 
 import json
 
-import schemas
-import jsonschema_
-import db
-import models
-from clients.aviata import Client
+from code import schemas
+from code import jsonschema_
+from code import db
+from code import models
+from code.clients.aviata import Client
 
 
 async def create_booking(request):

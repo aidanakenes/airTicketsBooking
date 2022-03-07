@@ -1,7 +1,4 @@
 import httpx
-from httpx._exceptions import TimeoutException
-
-from helpers.decorators import retry
 
 
 class Client:
@@ -17,7 +14,7 @@ class Client:
         return response
 
     async def post(self, url, json=None, data=None, **kwargs):
-        return await self._request('POST', url, json=json, data=data, **kwargs)
+        return await self._request('POST', url, json=json, data=data, timeout=self._timeout, **kwargs)
 
     async def get(self, url, json=None, params=None, **kwargs):
-        return await self._request('GET', url, json=json, params=params, **kwargs)
+        return await self._request('GET', url, json=json, params=params, timeout=self._timeout, **kwargs)

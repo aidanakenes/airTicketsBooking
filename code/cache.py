@@ -1,6 +1,6 @@
 import json
 
-import settings
+from code import settings
 
 
 async def generate_search_key(search_id, offer_id):

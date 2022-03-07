@@ -1,14 +1,13 @@
-from sanic import Sanic, response
-import httpx
+from sanic import response
 
 import json
 
-import schemas
-import jsonschema_
-import cache
-from helpers.helpers import convert_currency
-from clients.aviata import Client
-from helpers import errors
+from code import schemas
+from code import jsonschema_
+from code import cache
+from code.helpers.helpers import convert_currency
+from code.clients.aviata import Client
+from code.helpers import errors
 
 
 async def search(request):
@@ -21,7 +20,7 @@ async def search(request):
         'search_id': provider_response.json().get('search_id')
     }
 
-    if request.json.get('currency') is not 'KZT':
+    if request.json.get('currency') != 'KZT':
         provider_response = await convert_currency(request, provider_response.json(), request.json.get('currency'))
 
     await cache.save_search_results(request.app.ctx.redis, provider_response, search_results.get('search_id'))

@@ -1,5 +1,5 @@
 import jsonschema
-from helpers import errors
+from code.helpers import errors
 
 
 async def validate(request_data, schema):

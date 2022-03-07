@@ -1,4 +1,4 @@
-from helpers import errors
+from code.helpers import errors
 from . import Client as BaseClient
 
 

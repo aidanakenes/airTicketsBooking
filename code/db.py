@@ -1,8 +1,8 @@
 from datetime import datetime
 import json
 
-from helpers.decorators import with_connection
-import models
+from code.helpers.decorators import with_connection
+from code import models
 
 
 @with_connection
@@ -57,7 +57,7 @@ async def _select_booking(conn, booking_id):
 @with_connection
 async def get_bookings(email, phone, *args, **kwargs):
     conn = kwargs.pop('connection')
-    stmt = """SELECT b.offer_id, b.phone, b.email, od.details, b.passengers 
+    stmt = """SELECT b.booking_id, b.phone, b.email, od.details, b.passengers 
             FROM booking b 
             INNER JOIN offer_details od ON b.offer_details_id=od.offer_details_id 
             WHERE b.email=$1 AND b.phone=$2;"""
