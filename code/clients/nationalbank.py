@@ -19,6 +19,6 @@ class Client(BaseClient):
         provider_response = await self.get(url='/rss/get_rates.cfm', params=params)
 
         if provider_response is None:
-            raise errors.BookNotFound()
+            raise errors.CannotGetCurrencyDataFromProvider()
 
         return xmltodict.parse(provider_response.text)
