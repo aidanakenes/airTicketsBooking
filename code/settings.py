@@ -1,6 +1,6 @@
 import os
 
-DATABASE_URL = os.environ['POSTGRES_DSN'] or 'postgres://postgres:aknsm@localhost/postgres'
-REDIS_URL = os.environ['REDIS_DSN'] or 'redis://localhost'
-SEARCH_RESULTS_REDIS_TTL = int(os.environ['SEARCH_RESULTS_REDIS_TTL']) or 1800
-CURRENCY_RESULTS_REDIS_TTL = int(os.environ['CURRENCY_RESULTS_REDIS_TTL']) or 86400
+POSTGRES_DSN = os.environ['POSTGRES_DSN'] if os.environ['POSTGRES_DSN'] else 'postgres://postgres:aknsm@localhost/postgres'
+REDIS_DSN = os.environ['REDIS_DSN'] if os.environ['REDIS_DSN'] else 'redis://localhost'
+SEARCH_RESULTS_REDIS_TTL = int(os.environ['SEARCH_RESULTS_REDIS_TTL']) if os.environ['SEARCH_RESULTS_REDIS_TTL'] else 1800
+CURRENCY_RESULTS_REDIS_TTL = int(os.environ['CURRENCY_RESULTS_REDIS_TTL']) if os.environ['CURRENCY_RESULTS_REDIS_TTL'] else 86400

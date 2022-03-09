@@ -12,7 +12,7 @@ app = Sanic('air-tickets-booking')
 
 async def init_before(app, loop):
     app.ctx.db_pool = await asyncpg.create_pool(dsn=settings.POSTGRES_DSN, loop=loop)
-    app.ctx.redis = await aioredis.from_url(settings.REDIS_URL, decode_responses=True, max_connections=50)
+    app.ctx.redis = await aioredis.from_url(settings.REDIS_DSN, decode_responses=True, max_connections=50)
 
 
 async def cleanup(app, loop):
