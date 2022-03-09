@@ -3,8 +3,8 @@ import httpx
 
 class Client:
 
-    def __init__(self, base_url, *args, **kwargs):
-        self._timeout = 30
+    def __init__(self, base_url: str, *args, **kwargs):
+        self._timeout = 60
         self._home = base_url
 
     async def _request(self, method_type, url, *args, **kwargs):

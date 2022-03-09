@@ -1,3 +1,5 @@
+from typing import List
+
 from code.helpers import errors
 from . import Client as BaseClient
 
