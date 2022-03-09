@@ -6,6 +6,7 @@ import traceback
 
 from code.handlers import search, offers, booking
 from code import settings
+from code import currencies
 
 app = Sanic('air-tickets-booking')
 
@@ -13,6 +14,7 @@ app = Sanic('air-tickets-booking')
 async def init_before(app, loop):
     app.ctx.db_pool = await asyncpg.create_pool(dsn=settings.POSTGRES_DSN, loop=loop)
     app.ctx.redis = await aioredis.from_url(settings.REDIS_DSN, decode_responses=True, max_connections=50)
+    await currencies.update_currency()
 
 
 async def cleanup(app, loop):

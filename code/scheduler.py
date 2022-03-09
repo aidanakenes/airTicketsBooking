@@ -3,7 +3,6 @@ import asyncio
 
 from code import currencies
 
-currencies.update_currency()
 
 scheduler = AsyncIOScheduler(timezone='Asia/Almaty')
 scheduler.add_job(
