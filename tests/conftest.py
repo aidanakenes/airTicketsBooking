@@ -18,6 +18,12 @@ cache_dsn = 'redis://localhost'
 
 
 @pytest.fixture
+def app():
+    from code.app import app
+    return app
+
+
+@pytest.fixture
 async def pool_database() -> asyncpg.pool.Pool:
     async with asyncpg.create_pool(db_dsn) as pool:
         yield pool
@@ -61,6 +67,22 @@ def offer_id():
 @pytest.fixture
 def invalid_offer_id():
     return 'invalid-offer-id'
+
+
+@pytest.fixture
+def request_search_data():
+    return {
+        "provider": "Amadeus",
+        "cabin": "Economy",
+        "origin": "ALA",
+        "destination": "NQZ",
+        "dep_at": "2022-05-10",
+        "arr_at": "2022-05-11",
+        "adults": 2,
+        "children": 0,
+        "infants": 0,
+        "currency": "RUB"
+    }
 
 
 @pytest.fixture
@@ -144,6 +166,30 @@ def search_data():
                     "ADT": 1,
                     "CHD": 0,
                     "INF": 0
+                }
+            }
+        ]
+    }
+
+
+@pytest.fixture
+def booking_data():
+    return {
+        "offer_id": "d5a7a5b7-a4a3-49e7-9c69-b44d2cbe15cf",
+        "phone": "+77777777777",
+        "email": "user@example.com",
+        "passengers": [
+            {
+                "gender": "M",
+                "type": "ADT",
+                "first_name": "Craig",
+                "last_name": "Bensen",
+                "date_of_birth": "1985-08-24",
+                "citizenship": "US",
+                "document": {
+                    "number": "N2343545634",
+                    "expires_at": "2025-08-24",
+                    "iin": "123456789123"
                 }
             }
         ]
