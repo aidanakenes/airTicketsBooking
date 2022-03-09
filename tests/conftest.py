@@ -24,6 +24,13 @@ async def pool_database() -> asyncpg.pool.Pool:
 
 
 @pytest.fixture
+async def redis_client() -> aioredis.Redis:
+    redis: aioredis.Redis = await aioredis.from_url(url=cache_dsn, encoding='utf-8')
+    yield redis
+    await redis.close()
+
+
+@pytest.fixture
 def booking_id():
     return '93a02876-1f45-452f-853e-e09e8d9b886d'
 
@@ -286,25 +293,3 @@ def booking_obj():
             }
         ]
     })
-
-
-@pytest.fixture
-async def redis_client() -> aioredis.Redis:
-    redis: aioredis.Redis = await aioredis.from_url(url=cache_dsn, encoding='utf-8')
-    yield redis
-    await redis.close()
-
-# @pytest.fixture
-# def app():
-#     from code.app import app
-#     return app
-
-#
-# @pytest.fixture
-# def fake_uuid():
-#     return '557d187d-6465-4850-b4ea-6121752614f8'
-#
-#
-# @pytest.fixture
-# def search_response(fake_uuid):
-#     return {'id': fake_uuid, 'status': 'pending', 'items': []}
