@@ -37,6 +37,11 @@ def filters():
 
 
 @pytest.fixture
+def currency_data():
+    return 'USD'
+
+
+@pytest.fixture
 def search_id():
     return '557d187d-6465-4850-b4ea-6121752614f8'
 
