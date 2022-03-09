@@ -1,7 +1,5 @@
 import pytest
 
-from datetime import datetime
-
 invalid_book_data = {
     'offer_id': 'offer_id',
     'phone': 'phone',
