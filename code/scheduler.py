@@ -9,7 +9,7 @@ scheduler = AsyncIOScheduler(timezone='Asia/Almaty')
 scheduler.add_job(
     currencies.update_currency,
     trigger='cron',
-    minute=00,
+    minute=0,
     hour=12,
     max_instances=1,
     replace_existing=True,
